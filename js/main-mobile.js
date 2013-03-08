@@ -8,7 +8,7 @@ requirejs.config({
 		'bootstrap': 'vendor/bootstrap',
 		'modernizr': 'vendor/modernizr-2.6.2-respond-1.1.0.min',
 		"plugin": "plugins",
-		"workspace":"bb_mvc/controllers/workspace"
+		"workspaceMobile":"bb_mvc/controllers/workspaceMobile"
 	},
 	shim: {
 	"bootstrap": {
@@ -24,9 +24,9 @@ requirejs.config({
 		},
 	}
 });
-define(["backbone", "workspace"], function (Backbone, workspace)
+define(["backbone", "workspaceMobile"], function (Backbone, workspaceMobile)
 {
-	var mainController = new workspace();
+	var mainController = new workspaceMobile();
 	
 	Backbone.history.start();
 });

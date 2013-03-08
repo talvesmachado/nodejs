@@ -8,7 +8,8 @@ define(["backbone"], function ( Backbone) {
 			},
 			render : function(){
 				var that = this ;
-				var template = _.template( $('#maintpl').html()) ;
+				$('#main-wrapper').html('');
+				var template = _.template( $('#main-wrapper').html()) ;
 				$(that.el).append( template({  id   : "hpMain", txtContent : "showAbout" }));
 			}
 	});

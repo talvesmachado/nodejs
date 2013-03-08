@@ -4,9 +4,11 @@ define(["backbone"], function (Backbone) {
 		defaults : {
 			id : null,
 			code : null,
-			view : null
+			view : null, 
+			mySocket :null
 		},
 		initialize : function() {
+			console.log('BACKBONE : user created');
 		},
 	});
 

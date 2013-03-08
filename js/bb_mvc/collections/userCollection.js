@@ -1,9 +1,9 @@
-define(["backbone"], function (Backbone) {
+define(["backbone", '../models/user'], function (Backbone, user) {
 
 	var userCollection = Backbone.Collection.extend({
-		model : userModel,
+		model : user,
 		initialize : function() {
-			user collection
+			console.log(" BACKBONE : initialize user collection");
 		}
 	});
 
