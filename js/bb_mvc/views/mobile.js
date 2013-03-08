@@ -6,9 +6,9 @@ define(["backbone", "socket"], function(Backbone, io) {
 		registered : false,
 		mySocket: null,
 		initialize : function() {
-			/*var socket = io.connect('http://nodejs.envrecette.com:1337');*/
 			var that = this;
-			var socket = io.connect('http://localhost:1337');
+			var socket = io.connect('http://nodejs.envrecette.com:1337');
+			//var socket = io.connect('http://localhost:1337');
 			this.mySocket = socket;
 			socket.emit("newMobile_EVENT", { id : this.id }, function(data){
 				console.log("==> mobile Emit = ");

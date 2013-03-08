@@ -5,12 +5,13 @@ define(["backbone", "socket"], function(Backbone, io) {
 		el : "#mainView",
 		initialize : function() {
 			console.log('main views initialised !!!');
-			/*var socket = io.connect('http://nodejs.envrecette.com:1337');*/
-			var socket = io.connect('http://localhost:1337');
+			var socket = io.connect('http://nodejs.envrecette.com:1337');
+			//var socket = io.connect('http://localhost:1337');
 			this.id = this.generateId();
 			socket.emit("newRoom_EVENT", {
 				id : this.id
 			});
+			console.log('id = ' + this.id);
 			console.log('socket Connected');
 			socket.on('newUser_EVENT', function(socketID, data){
 				console.log('==> NEW USER');
