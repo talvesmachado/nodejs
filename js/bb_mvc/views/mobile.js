@@ -7,8 +7,7 @@ define(["backbone", "socket"], function(Backbone, io) {
 		mySocket: null,
 		initialize : function() {
 			var that = this;
-			var socket = io.connect('http://nodejs.envrecette.com:1337');
-			//var socket = io.connect('http://localhost:1337');
+			var socket = io.connect(window.environnement.domain);
 			this.mySocket = socket;
 			socket.emit("newMobile_EVENT", { id : this.id }, function(data){
 				console.log("==> mobile Emit = ");
@@ -34,7 +33,7 @@ define(["backbone", "socket"], function(Backbone, io) {
 		render : function() {
 			var that = this;
 			$('#main-wrapper').html('');
-			$('#main-wrapper').html('Mobile!!!!' + this.id);
+			$('#main-wrapper').html('Mobile Connected to : '+ this.id +'!!!!');
 		},
 		btClick: function()
 		{

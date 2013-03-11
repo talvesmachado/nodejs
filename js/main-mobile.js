@@ -3,16 +3,16 @@ requirejs.config({
 		"jquery": "vendor/jquery-1.9.1.min",
 		"underscore": "../node_modules/underscore/underscore",
 		"backbone": "../node_modules/backbone/backbone",
-		"socket": "http://nodejs.envrecette.com:1337/socket.io/socket.io.js",
-		//"socket": "http://localhost:1337/socket.io/socket.io.js",
+		"socket": window.environnement.domain+"/socket.io/socket.io.js",
 		'bootstrap': 'vendor/bootstrap',
 		'modernizr': 'vendor/modernizr-2.6.2-respond-1.1.0.min',
 		"plugin": "plugins",
-		"workspaceMobile":"bb_mvc/controllers/workspaceMobile"
+		"workspaceMobile":"bb_mvc/controllers/workspaceMobile", 
+		"templates":"template-utils"
 	},
 	shim: {
 	"bootstrap": {
-			deps: ["jquery", "modernizr"]
+			deps: ["jquery", "modernizr","templates" ]
 		},	
 	"underscore": {
 			deps: [],
@@ -27,6 +27,5 @@ requirejs.config({
 define(["backbone", "workspaceMobile"], function (Backbone, workspaceMobile)
 {
 	var mainController = new workspaceMobile();
-	
 	Backbone.history.start();
 });
