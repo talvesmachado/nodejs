@@ -4,7 +4,7 @@ requirejs.config({
 		"jqueryQR": "vendor/jquery.qrcode.min",
 		"underscore": "../node_modules/underscore/underscore",
 		"backbone": "../node_modules/backbone/backbone",
-		"socket": window.environnement.domain+"/socket.io/socket.io.js",
+		"socket": window.environnement.domain+":"+window.environnement.port+"/socket.io/socket.io.js",
 		'bootstrap': 'vendor/bootstrap',
 		'modernizr': 'vendor/modernizr-2.6.2-respond-1.1.0.min',
 		"plugin": "plugins",
@@ -30,7 +30,7 @@ requirejs.config({
 });
 define([ "backbone", "workspace"], function (Backbone, workspace)
 {
-	tpl.loadTemplates(['test'], function(){
+	tpl.loadTemplates(['connexion', 'comment'], function(){
 		var mainController = new workspace();
 		Backbone.history.start();
 	});

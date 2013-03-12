@@ -5,10 +5,12 @@ define(["backbone", "socket", 'jqueryQR'], function(Backbone, io, jqueryQR) {
 		el : "#mainView",
 		initialize : function() {
 			console.log('main views initialised !!!');
-			var socket = io.connect(window.environnement.domain);
+			var socket = io.connect(window.environnement.domain+":"+window.environnement.port);
 			this.id = this.generateId();
 			var that = this;
-			this.template = _.template(tpl.get('test'));
+			this.template = _.template(tpl.get('connexion'));
+			this.messageTpl = _.template(tpl.get('comment'));
+			
 			socket.emit("newRoom_EVENT", {
 				id : this.id
 			});
@@ -29,12 +31,13 @@ define(["backbone", "socket", 'jqueryQR'], function(Backbone, io, jqueryQR) {
 			var that = this;
 			var contentObj = {
 				id : "hpMain",
-				txtContent : 'vous pouvez connecter votre mobile!!!!', 
-				urlContent : 'http://localhost/nodejs/mobile.html#' + this.id
+				txtContent : 'Vous pouvez connecter votre mobile !!!!', 
+				urlContent : window.environnement.domain+window.environnement.file+'/mobile.html#' + this.id
 			};
 			$('#main-wrapper').html('');
-			this.$el.html(this.template(contentObj));
-			$('#qrcode').qrcode({width: 200,height: 200, text: "http://www.google.fr"});
+			$('#main-wrapper').html('<h1 class="alert alert-success">Room initialized !!!!</h1>');
+			this.$el.prepend(this.template(contentObj));
+			$('#qrcode').qrcode({width: 170,height: 170, text: contentObj.urlContent});
 		},
 		generateId : function() {
 			var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
@@ -47,9 +50,8 @@ define(["backbone", "socket", 'jqueryQR'], function(Backbone, io, jqueryQR) {
 			return randomstring;
 		},
 		clickTrigger : function (socketID, data) {
-				console.log('==> EVENT CLICK');
-				console.log(socketID);
-				console.log(data);
+				var that = this;
+				$('#message-wrapper').prepend(that.messageTpl(data));
 			}
 	});
 	return app;

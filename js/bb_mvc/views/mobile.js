@@ -1,45 +1,104 @@
-define(["backbone", "socket"], function(Backbone, io) {
+define(["facebook", "backbone", "socket"], function(FB, Backbone, io) {
 
 	var mobile = Backbone.View.extend({
 		el : "#mainView",
-		id :  null,
+		id : null,
 		registered : false,
-		mySocket: null,
+		mySocket : null,
+		fbID : null,
+		fbProfil : null,
 		initialize : function() {
 			var that = this;
-			var socket = io.connect(window.environnement.domain);
+			var socket = io.connect(window.environnement.domain + ':' + window.environnement.port);
 			this.mySocket = socket;
-			socket.emit("newMobile_EVENT", { id : this.id }, function(data){
-				console.log("==> mobile Emit = ");
-				console.log(data);
-			    if(data.registered = true){
-			      that.registered = true;
-			    }else{
-			      console.log(data.error);
-			    };
-   			 });
-			console.log('mobile');
-			
-			this.bind("remove", function() {
-			  this.destroy();
+			/**
+			 *	CONNEXION FACEBOOK
+			 **/
+			FB.Event.subscribe('auth.login', function(response) {
+				FB.api('/me', function(response) {
+					console.log(response);
+					that.connectToRoom(response);
+					
+				});
+			});
+			FB.getLoginStatus(function(response) {
+				
+				if (response.status == "connected") {
+
+		            FB.api('/me', function(response) { 
+		            	console.log(response);
+							that.connectToRoom(response);
+							});
+				};
 			});
 			
-			this.render();
+			
+
+			this.bind("remove", function() {
+				that.destroy();
+			});
+
 		},
-		events : 
+		events : {
+			'click #bt-evt' : 'btClick',
+		},
+		fbLogout: function()
 		{
-			'click #bt-evt' : 'btClick'
+				console.log("logout1");
+
+			FB.logout(function(response) {
+				console.log("logout");
+	            $('#facebook_button_box').show();
+	            $('#facebook_profile').hide();
+	
+	        });
+		},
+		connectToRoom : function(response) {
+			var that = this;
+			that.fbID = response.id;
+			that.fbProfil = response;
+				that.mySocket.emit("newMobile_EVENT", {
+					id : that.id
+				}, function(data) {
+					if (data.registered = true) {
+						that.registered = true;
+						that.render();
+					} else {
+						console.log(data.error);
+					};
+				});
+			
+			/*$.getJSON('http://graph.facebook.com/' + that.fbID).success(function(data) {
+				that.fbProfil = data;
+				that.mySocket.emit("newMobile_EVENT", {
+					id : that.id
+				}, function(data) {
+					if (data.registered = true) {
+						that.registered = true;
+						that.render();
+					} else {
+						console.log(data.error);
+					};
+				});
+			});*/
 		},
 		render : function() {
-			var that = this;
 			$('#main-wrapper').html('');
-			$('#main-wrapper').html('Mobile Connected to : '+ this.id +'!!!!');
+			$('#main-wrapper').html('<h1 class="alert alert-success">Mobile Connected to : ' + this.id + '!!!!</h1>');
+			$('#message-from').fadeIn(1000);
 		},
-		btClick: function()
-		{
-			this.mySocket.emit('mobileClick_EVENT', 'click mobile = '+ this.id);
+		btClick : function(e) {
+			e.preventDefault();
+			console.log($('#message').val());
+			this.mySocket.emit('mobileClick_EVENT', {
+				message : $('#message').val(),
+				fbID : this.fbID,
+				fbProfil : this.fbProfil,
+			});
+			console.log(this.fbProfil);
+			$('#message').val('');
+
 		}
-		
 	});
 	return mobile;
-}); 
+});
